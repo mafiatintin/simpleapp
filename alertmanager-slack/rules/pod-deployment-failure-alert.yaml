@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+ labels:
+   app: prometheus-operator
+   chart: prometheus-operator-8.16.1
+   heritage: Helm
+   release: prometheus-operator
+ name: prometheus-operator-deployment-failure.rules
+ namespace: monitoring
+spec:
+ groups:
+ - name: pod-deployment-failure-rules
+   rules:
+   - alert: PodFailure-DeploymentFailure
+     annotations:
+       title: 'Deployment failed'
+       description: 'Deployment failed. Check the informations on the Details Section'
+     expr: kube_pod_container_status_waiting_reason{reason=~"CrashLoopBackOff|CreateContainerConfigError|CreateContainerError"} > 0
+     for: 1m
+     labels:
+       severity: warning

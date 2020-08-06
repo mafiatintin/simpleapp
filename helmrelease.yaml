@@ -1,0 +1,13 @@
+apiVersion: helm.fluxcd.io/v1
+kind: HelmRelease
+metadata:
+  name: simpleapp 
+  namespace: default 
+spec:
+  releaseName: simpleapp
+  chart:
+    git: git@github.com:khadka-prakash/simpleapp.git 
+    ref: master
+    path: ./charts/simpleapp
+#  values:
+#    replicaCount: 1

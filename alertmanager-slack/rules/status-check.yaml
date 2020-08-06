@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+ labels:
+   app: prometheus-operator
+   chart: prometheus-operator-8.16.1
+   heritage: Helm
+   release: prometheus-operator
+ name: prometheus-operator-status-check.rules
+ namespace: monitoring
+spec:
+ groups:
+ - name: status-check
+   rules:
+   - alert: ErrorStatusCheck
+     annotations:
+       title: '4xx/5xx Error'
+       description: ''
+     expr:   sum (rate(nginx_ingress_controller_request_duration_seconds_count{ingress =~ "simpleapp",status =~"[4-5].*",}[1m])) by(path, status) > 0
+     for: 1m
+     labels:
+       severity: warning

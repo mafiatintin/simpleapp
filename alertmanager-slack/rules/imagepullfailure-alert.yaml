@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+ labels:
+   app: prometheus-operator
+   chart: prometheus-operator-8.16.1
+   heritage: Helm
+   release: prometheus-operator
+ name: prometheus-operator-imagepullerr.rules
+ namespace: monitoring
+spec:
+ groups:
+ - name: imagepull-failure-rules
+   rules:
+   - alert: ImagePullBackOff
+     annotations:
+       title: 'Instance {{ $labels.instance }} Imagepullerror'
+       description: 'Pod name {{$labels.pod}} and endpoint {{ $labels.instance }}  of namespace {{ $labels.namespace }} is unable to pull the image form the provided repository.'
+     expr: kube_pod_container_status_waiting_reason{reason="ImagePullBackOff"} > 0
+     for: 1m
+     labels:
+       severity: warning

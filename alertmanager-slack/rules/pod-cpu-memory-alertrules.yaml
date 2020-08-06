@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+ labels:
+   app: prometheus-operator
+   chart: prometheus-operator-8.16.1
+   heritage: Helm
+   release: prometheus-operator
+ name: prometheus-operator-pod-cpu-memory-threshold.rules
+ namespace: monitoring
+spec:
+ groups:
+ - name: cpu-memory-pod-threshold-rules
+   rules:
+   - alert: memory-threshold
+     annotations:
+       title: 'Memory utilization greater than  80%' 
+       description: 'Pod name {{$labels.pod}} and endpoint {{ $labels.instance }}  of namespace {{ $labels.namespace }} Memory utilization is greater than  80%.'
+     expr:  sum (container_memory_usage_bytes{container_name!="POD",container_name!="",container_name="simpleapp",namespace="default"}) by ( pod ) / sum (kube_pod_container_resource_limits_memory_bytes{container="simpleapp",namespace="default" }) by ( pod )  *100 > 80 
+     for: 2m
+     labels:
+       severity: warning
+   - alert: cpu-threshold
+     annotations:
+       title: 'CPU utilization greater than  80% '
+       description: 'Pod name {{$labels.pod}} and endpoint {{ $labels.instance }}  of namespace {{ $labels.namespace }} CPU utilization is greater than  80%.'
+     expr: sum(rate(container_cpu_usage_seconds_total{container_name!="POD",container_name!="",container_name="simpleapp",namespace="default"}[2m]) ) by (pod) / sum (kube_pod_container_resource_limits_cpu_cores{container="simpleapp",namespace="default"} ) by (pod) *100 > 80
+     for: 2m
+     labels:
+       severity: warning

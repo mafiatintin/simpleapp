@@ -1,0 +1,38 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+ labels:
+   app: prometheus-operator
+   chart: prometheus-operator-8.16.1
+   heritage: Helm
+   release: prometheus-operator
+ name: prometheus-operator-node-cpu-memory-threshold.rules
+ namespace: monitoring
+spec:
+ groups:
+ - name: cpu-memory-disk-threshold-rules
+   rules:
+   - alert: node-memory threshold
+     annotations:
+       title: 'Nodes Memory utilization greater than 80%' 
+       description: 'Node name {{$labels.node}} has reached Memory utilization is greater than  80%.'
+     expr: sum(container_memory_usage_bytes{id="/"})  by (node) / sum(kube_node_status_capacity_memory_bytes) by (node) *100 > 80
+     for: 2m
+     labels:
+       severity: warning
+   - alert: nodecpu-threshold
+     annotations:
+       title: 'Nodes CPU utilization greater than  80%'
+       description: 'Node name {{$labels.node}} has reached CPU utilization is greater than  80%.'
+     expr: sum (rate (container_cpu_usage_seconds_total{id="/"}[1m])) by (node) / sum (machine_cpu_cores) by (node)  *100 > 80
+     for: 2m
+     labels:
+       severity: warning
+   - alert: node-disk-threshold
+     annotations:
+       title: 'Nodes Disk Space utilization greater than  80%'
+       description: 'Node name {{$labels.node}} has reached disk utilization is greater than  80%.'
+     expr:  sum ( sum (node_filesystem_size_bytes) by (instance) - sum (node_filesystem_avail_bytes) by (instance)  ) by (instance)  / sum (node_filesystem_size_bytes) by (instance) *100 > 80
+     for: 2m
+     labels:
+       severity: warning

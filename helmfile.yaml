@@ -1,23 +1,44 @@
 repositories:
+  - name: loki 
+    url: https://grafana.github.io/loki/charts
   - name: stable
     url: https://kubernetes-charts.storage.googleapis.com
+  - name: ingress-nginx 
+    url: https://kubernetes.github.io/ingress-nginx
 
 releases:
-  - name: ingress-controller
-    namespace: kube-system
-    chart: stable/nginx-ingress
-    version: "1.40.3"
+  - name: loki
+    namespace: monitoring
+    chart: loki/loki-stack
+    set:
+    - name: persistence.enabled
+      value: true
+    - name: loki.persistence.size
+      value: 40Gi
 
-  - name: simpleapp
-    namespace: default
-    chart: ./charts/simpleapp
+  - name: prometheus-operator
+    namespace: monitoring 
+    chart: stable/prometheus-operator
+    version: 8.16.1
+    set:
+    - name: grafana.persistence.enabled
+      value: true 
+    - name: grafana.persistence.size
+      value: 1Gi
+
+  - name: ingress-nginx
+    namespace: ingress-nginx 
+    chart: ingress-nginx/ingress-nginx
     values:
-      - image:
-          tag: v0.0.1
-        ingress:
-          enabled: true
-          hosts:
-            - host: mflogger.139.59.201.169.xip.io
-              paths:
-                - /
-                - /*
+    - "./ingress-nginx/values.yaml"
+    set:
+    - name: controller.metrics.enabled
+      value: true
+    - name: controller.metrics.serviceMonitor.enabled
+      value: true
+    - name: controller.service.externalTrafficPolicy
+      value: Local
+    - name: controller.metrics.serviceMonitor.namespace
+      value: monitoring
+    - name: controller.metrics.serviceMonitor.additionalLabels.release
+      value: prometheus-operator 
