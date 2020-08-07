@@ -25,6 +25,8 @@ releases:
       value: true 
     - name: grafana.persistence.size
       value: 1Gi
+    - name: grafana.image.tag
+      value: 6.3.7
 
   - name: ingress-nginx
     namespace: ingress-nginx 

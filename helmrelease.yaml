@@ -6,7 +6,7 @@ metadata:
 spec:
   releaseName: simpleapp
   chart:
-    git: git@github.com:khadka-prakash/simpleapp.git 
+    git: git@github.com:mafiatintin/simpleapp.git
     ref: master
     path: ./charts/simpleapp
 #  values:
