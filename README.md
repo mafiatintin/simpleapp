@@ -4,6 +4,13 @@
 
 For this we have use helmfile. Loki, prometheus-operator, grafana are installed in monitoring namespace whereas ingress-nginx has been installed in ingress-nginx namespace.
 
+## Install helmfile
+```
+  1. url : https://github.com/roboll/helmfile/releases
+  2. Download the package: helmfile_linux_amd64
+  3. mv helmfile_linux_amd64 helmfile; chmod +x helmfile; sudo mv helmfile /usr/local/bin
+```
+
 Create a file called helmfile.yaml and enter the following
 
 ```
@@ -84,6 +91,11 @@ Flux is a continuous delivery tool that automates the deployment of containers t
 - Deployment is faster. As soon as the code is pushed it will get deployed. 
 - It can be reverted if something goes wrong.
 - Elimate the use of kubectl command
+
+## Install fluxctl binary
+```
+  sudo snap install fluxctl
+```
  
 Create flux namespace
 
@@ -192,15 +204,15 @@ Get the loadbalancer
 ```
 kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller
 NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE   SELECTOR
-ingress-nginx-controller   LoadBalancer   10.245.244.17   64.225.86.144   80:30047/TCP,443:30812/TCP   9h    app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
+ingress-nginx-controller   LoadBalancer   xx.xx.xx.xx     xx.xx.xx.xx   80:30047/TCP,443:30812/TCP   9h    app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
 ```
-
-Map domain.com to 64.225.86.144 in /etc/hosts
+Copy the EXTERNAL-IP.
+Map domain.com to <EXTERNAL-IP> in /etc/hosts
 
 Open /etc/hosts file and paste the following
 
 ```
-64.225.86.144 domain.com
+<EXTERNAL-IP> domain.com
 ```
 
 Then browse http://domain.com/log/hello. You will get {"foo":"bar"}
