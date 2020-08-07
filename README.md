@@ -204,15 +204,15 @@ Get the loadbalancer
 ```
 kubectl --namespace ingress-nginx get services -o wide -w ingress-nginx-controller
 NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE   SELECTOR
-ingress-nginx-controller   LoadBalancer   10.245.244.17   64.225.86.144   80:30047/TCP,443:30812/TCP   9h    app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
+ingress-nginx-controller   LoadBalancer   xx.xx.xx.xx     xx.xx.xx.xx   80:30047/TCP,443:30812/TCP   9h    app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx
 ```
-
-Map domain.com to 64.225.86.144 in /etc/hosts
+Copy the EXTERNAL-IP.
+Map domain.com to <EXTERNAL-IP> in /etc/hosts
 
 Open /etc/hosts file and paste the following
 
 ```
-64.225.86.144 domain.com
+<EXTERNAL-IP> domain.com
 ```
 
 Then browse http://domain.com/log/hello. You will get {"foo":"bar"}
