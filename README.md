@@ -4,6 +4,13 @@
 
 For this we have use helmfile. Loki, prometheus-operator, grafana are installed in monitoring namespace whereas ingress-nginx has been installed in ingress-nginx namespace.
 
+## Install helmfile
+```
+  1. url : https://github.com/roboll/helmfile/releases
+  2. Download the package: helmfile_linux_amd64
+  3. mv helmfile_linux_amd64 helmfile; chmod +x helmfile; sudo mv helmfile /usr/local/bin
+```
+
 Create a file called helmfile.yaml and enter the following
 
 ```
@@ -84,6 +91,11 @@ Flux is a continuous delivery tool that automates the deployment of containers t
 - Deployment is faster. As soon as the code is pushed it will get deployed. 
 - It can be reverted if something goes wrong.
 - Elimate the use of kubectl command
+
+## Install fluxctl binary
+```
+  sudo snap install fluxctl
+```
  
 Create flux namespace
 
