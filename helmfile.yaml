@@ -16,6 +16,7 @@ releases:
     - name: loki.persistence.size
       value: 40Gi
 
+
   - name: prometheus-operator
     namespace: monitoring 
     chart: stable/prometheus-operator
